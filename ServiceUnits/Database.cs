@@ -1,4 +1,5 @@
 ﻿using Arc_Station_Logger.ServiceUnits.DataScripts;
+using Arc_Station_Logger.ServiceUnits.Queries;
 using ArcLogger.Scripts;
 using System;
 using System.Data.SqlClient;
@@ -47,23 +48,29 @@ namespace Arc_Station_Logger.ServiceUnits
         public static void InsertToDB()
         {
 
-            cnn.Open();
             if (SettingsManager.f_DailySpins == 1)
             {
-                DailySpins.Run();
+                //DailySpins.Run();
             }
             if (SettingsManager.f_PlayLog == 1)
             {
-                PlayLog.Run();
+                //PlayLog.Run();
             }
             if (SettingsManager.f_ArtistCount == 1)
             {
-                ArtistCount.Run();
+                //ArtistCount.Run();
             }
             if (SettingsManager.f_PlayCount == 1)
             {
-                PlayCount.Run();
+                //PlayCount.Run();
             }
+
+            cnn.Open();
+
+            sql_Artists.Run();
+            sql_Songs.Run();
+            sql_MonthlySpins.Run();
+
             cnn.Close();
         }
 
