@@ -38,10 +38,16 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                     $"[Dec] INT NULL)", Database.cnn);
                 cmdCreateTable.ExecuteNonQuery();
             }
+
+            InsertRecord();
         }
 
         public static void InsertRecord()
         {
+            SqlCommand cmdCheckSong = new SqlCommand("SELECT COUNT(*) FROM [dbo].[TB_PlayCount] WHERE Artist = @Artist AND Title = @Title;", Database.cnn);
+            cmdCheckSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
+            cmdCheckSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+            int num1 = Convert.ToInt32(sqlCommand.ExecuteScalar());
 
         }
     }
