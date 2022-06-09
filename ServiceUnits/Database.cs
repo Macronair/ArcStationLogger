@@ -70,6 +70,7 @@ namespace Arc_Station_Logger.ServiceUnits
             sql_Artists.Run();
             sql_Songs.Run();
             sql_MonthlySpins.Run();
+            sql_WeeklySpins.Run();
 
             cnn.Close();
         }

@@ -26,6 +26,8 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                     $"[FirstPlayed] DATETIME NOT NULL)", Database.cnn);
                 cmdCreateTable.ExecuteNonQuery();
             }
+
+            InsertRecord();
         }
 
         private static void InsertRecord()
