@@ -1,4 +1,5 @@
 ﻿using Arc_Station_Logger.ServiceUnits.DataScripts;
+using Arc_Station_Logger.ServiceUnits.Queries;
 using ArcLogger.Scripts;
 using System;
 using System.Data.SqlClient;
@@ -47,24 +48,71 @@ namespace Arc_Station_Logger.ServiceUnits
         public static void InsertToDB()
         {
 
-            cnn.Open();
             if (SettingsManager.f_DailySpins == 1)
             {
-                DailySpins.Run();
+                //DailySpins.Run();
             }
             if (SettingsManager.f_PlayLog == 1)
             {
-                PlayLog.Run();
+                //PlayLog.Run();
             }
             if (SettingsManager.f_ArtistCount == 1)
             {
-                ArtistCount.Run();
+                //ArtistCount.Run();
             }
             if (SettingsManager.f_PlayCount == 1)
             {
-                PlayCount.Run();
+                //PlayCount.Run();
             }
+
+            cnn.Open();
+
+            sql_Artists.Run();
+            sql_Songs.Run();
+            sql_MonthlySpins.Run();
+            sql_WeeklySpins.Run();
+
             cnn.Close();
+
+            if(SettingsManager.NewSong == true)
+            {
+                ServiceLog.WriteFile($"Now Playing (NEW SONG): {SettingsManager.CurrentArtist} - {SettingsManager.CurrentTitle} |T:{SettingsManager.Spins_T_Song}|W:{SettingsManager.Spins_W_Song}|M:{SettingsManager.Spins_M_Song}|Y:{SettingsManager.Spins_Y_Song}|");
+
+                var nl = Environment.NewLine;
+                string eventmessage =
+                    $"-= SONG ADDED TO DATABASE =-{nl}" +
+                    $"Now Playing: {SettingsManager.CurrentArtist} - {SettingsManager.CurrentTitle} {nl}" +
+                    $"----------------{nl}" +
+                    $"Song Spins: {nl}" +
+                    $" - This week: {SettingsManager.Spins_W_Song}{nl}" +
+                    $" - This month: {SettingsManager.Spins_M_Song}{nl}" +
+                    $" - This year: {SettingsManager.Spins_Y_Song}{nl}" +
+                    $" - Total: {SettingsManager.Spins_T_Song}{nl}" +
+                    $"{nl}" +
+                    $"Artist Spins:{nl}" +
+                    $" - This year: {SettingsManager.Spins_Y_Artist}{nl}" +
+                    $" - Total: {SettingsManager.Spins_T_Artist}";
+                ServiceLog.WriteEvent(eventmessage, "Now Playing (NEW SONG)", EventLogEntryType.Information);
+            }
+            else
+            {
+                ServiceLog.WriteFile($"Now Playing: {SettingsManager.CurrentArtist} - {SettingsManager.CurrentTitle} |T:{SettingsManager.Spins_T_Song}|W:{SettingsManager.Spins_W_Song}|M:{SettingsManager.Spins_M_Song}|Y:{SettingsManager.Spins_Y_Song}|");
+
+                var nl = Environment.NewLine;
+                string eventmessage =
+                    $"Now Playing: {SettingsManager.CurrentArtist} - {SettingsManager.CurrentTitle} {nl}" +
+                    $"----------------{nl}" +
+                    $"Song Spins: {nl}" +
+                    $" - This week: {SettingsManager.Spins_W_Song}{nl}" +
+                    $" - This month: {SettingsManager.Spins_M_Song}{nl}" +
+                    $" - This year: {SettingsManager.Spins_Y_Song}{nl}" +
+                    $" - Total: {SettingsManager.Spins_T_Song}{nl}" +
+                    $"{nl}" +
+                    $"Artist Spins:{nl}" +
+                    $" - This year: {SettingsManager.Spins_Y_Artist}{nl}" +
+                    $" - Total: {SettingsManager.Spins_T_Artist}";
+                ServiceLog.WriteEvent(eventmessage, "Now Playing", EventLogEntryType.Information);
+            }
         }
 
     }
