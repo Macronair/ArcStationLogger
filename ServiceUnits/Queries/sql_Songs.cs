@@ -47,6 +47,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
                 cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
                 cmdInsertSong.ExecuteNonQuery();
+                SettingsManager.NewSong = true;
             }
             else if (results > 0)    // Run if song is already in the datatable.
             {
@@ -55,6 +56,22 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
                 cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
                 cmdUpdateSong.ExecuteNonQuery();
+                SettingsManager.NewSong = false;
+            }
+
+            // Return the values how many times the song has played.
+
+            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT TotalSpins FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title", Database.cnn))
+            {
+                cmdReadSpins.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
+                cmdReadSpins.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                using (SqlDataReader dr = cmdReadSpins.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        SettingsManager.Spins_T_Song = (int)dr["TotalSpins"];
+                    }
+                }
             }
         }
 

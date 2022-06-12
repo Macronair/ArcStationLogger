@@ -21,8 +21,17 @@ namespace Arc_Station_Logger.ServiceUnits
         public static int f_DailySpins;
         public static int f_ArtistCount;
 
+        // Info about the current song
+        public static bool NewSong;
         public static string CurrentArtist;
         public static string CurrentTitle;
+        public static int Spins_T_Artist;
+        public static int Spins_Y_Artist;
+        public static int Spins_T_Song;
+        public static int Spins_M_Song;
+        public static int Spins_W_Song;
+        public static int Spins_Y_Song;
+
         public static int SpinsTotal;
         public static int SpinsWeek;
         public static int SpinsMonth;

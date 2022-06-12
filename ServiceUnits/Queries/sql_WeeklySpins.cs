@@ -65,6 +65,20 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
                 cmdUpdateSong.ExecuteNonQuery();
             }
+
+            // Return the values how many times the song has played.
+            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT {WeekColumn} FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title", Database.cnn))
+            {
+                cmdReadSpins.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
+                cmdReadSpins.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                using (SqlDataReader dr = cmdReadSpins.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        SettingsManager.Spins_W_Song = (int)dr[WeekColumn];
+                    }
+                }
+            }
         }
 
         private static int WeekNr()

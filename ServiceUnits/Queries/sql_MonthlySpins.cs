@@ -10,7 +10,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
     internal class sql_MonthlySpins
     {
 
-        static string TableName = "02_TitleSpins_" + DateTime.Now.Year;
+        static string TableName = "02_MonthlySpins_" + DateTime.Now.Year;
         static string CurrentMonth;
 
         public static void Run()
@@ -84,6 +84,22 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 cmdUpdateSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
                 cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
                 cmdUpdateSong.ExecuteNonQuery();
+            }
+
+            // Return the values how many times the song has played.
+
+            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT {CurrentMonth},Total FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title", Database.cnn))
+            {
+                cmdReadSpins.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
+                cmdReadSpins.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                using (SqlDataReader dr = cmdReadSpins.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        SettingsManager.Spins_Y_Song = (int)dr["Total"];
+                        SettingsManager.Spins_M_Song = (int)dr[CurrentMonth];
+                    }
+                }
             }
         }
     }
