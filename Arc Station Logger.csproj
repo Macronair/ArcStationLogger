@@ -57,7 +57,7 @@
     <Compile Include="ServiceUnits\DataScripts\ArtistCount.cs" />
     <Compile Include="ServiceUnits\DataScripts\DailySpins.cs" />
     <Compile Include="ServiceUnits\DataScripts\PlayCount.cs" />
-    <Compile Include="ServiceUnits\DataScripts\PlayLog.cs" />
+    <Compile Include="ServiceUnits\Queries\sql_PlaylistLog.cs" />
     <Compile Include="ServiceUnits\Queries\sql_Artists.cs" />
     <Compile Include="ServiceUnits\Queries\sql_Songs.cs" />
     <Compile Include="ServiceUnits\Queries\sql_MonthlySpins.cs" />
