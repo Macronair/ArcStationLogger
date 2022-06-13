@@ -104,7 +104,7 @@ namespace Arc_Station_Logger
                     SettingsManager.CurrentArtist = songinfo[0];
                     SettingsManager.CurrentTitle = songinfo[1];
 
-                    ServiceLog.WriteFile($"Now Playing: {SettingsManager.CurrentArtist} - {SettingsManager.CurrentTitle}");
+                    //ServiceLog.WriteFile($"Now Playing: {SettingsManager.CurrentArtist} - {SettingsManager.CurrentTitle}");
 
                     Database.InsertToDB();
                 }

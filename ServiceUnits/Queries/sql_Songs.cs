@@ -105,7 +105,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
             }
             else if (results > 0)    // Run if song is already in the datatable.
             {
-                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, Week = Week + 1, Month = Month + 1, Year = Year + 1 LastPlayed = @LastPlayed WHERE Artist = @Artist AND Title = @Title", Database.cnn);
+                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, Week = Week + 1, Month = Month + 1, Year = Year + 1, LastPlayed = @LastPlayed WHERE Artist = @Artist AND Title = @Title", Database.cnn);
                 cmdUpdateSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
                 cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
                 cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
