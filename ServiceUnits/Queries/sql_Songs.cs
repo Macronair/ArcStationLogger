@@ -54,7 +54,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, LastPlayed = @LastPlayed WHERE Artist = @Artist AND Title = @Title", Database.cnn);
                 cmdUpdateSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
                 cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
-                cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
                 cmdUpdateSong.ExecuteNonQuery();
                 SettingsManager.NewSong = false;
             }

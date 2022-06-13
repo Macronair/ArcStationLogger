@@ -24,7 +24,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                     $"[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, " +
                     $"[Artist] NVARCHAR(MAX) NOT NULL, " +
                     $"[Title] NVARCHAR(MAX) NOT NULL, " +
-                    $"[{WeekColumn}] INT NULL)", Database.cnn);
+                    $"[{WeekColumn}] INT NOT NULL)", Database.cnn);
                 cmdCreateTable.ExecuteNonQuery();
             }
 
@@ -36,7 +36,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
             SqlCommand cmdCheckColumn = new SqlCommand($"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{TableName}' AND column_name = '{WeekColumn}'", Database.cnn);
             if((int)cmdCheckColumn.ExecuteScalar() == 0)
             {
-                SqlCommand cmdCreateColumn = new SqlCommand($"ALTER TABLE {TableName} ADD {WeekColumn} INT NULL");
+                SqlCommand cmdCreateColumn = new SqlCommand($"ALTER TABLE [dbo].[{TableName}] ADD {WeekColumn} INT NOT NULL DEFAULT(0)", Database.cnn);
                 cmdCreateColumn.ExecuteNonQuery();
             }
 
@@ -75,7 +75,15 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 {
                     while (dr.Read())
                     {
-                        SettingsManager.Spins_W_Song = (int)dr[WeekColumn];
+                        try
+                        {
+                            SettingsManager.Spins_W_Song = (int)dr[WeekColumn];
+                        }
+                        catch(InvalidCastException ice)
+                        {
+                            SettingsManager.Spins_W_Song = 0;
+                        }
+                        
                     }
                 }
             }
