@@ -8,6 +8,7 @@ namespace Arc_Station_Logger.ServiceUnits
     internal class SettingsManager
     {
 
+        // General config file variables
         public static string ListenDirectory;
         public static string ListenFile;
 
@@ -16,10 +17,16 @@ namespace Arc_Station_Logger.ServiceUnits
         public static string SQLlogin;
         public static string SQLpassword;
 
+        // Activate certain scripts
         public static int f_PlayCount;
         public static int f_PlayLog;
         public static int f_DailySpins;
         public static int f_ArtistCount;
+
+        // Date variables
+        public static int CurrentWeek;
+        public static int CurrentMonth;
+        public static int CurrentYear;
 
         // Info about the current song
         public static bool NewSong;
@@ -32,6 +39,7 @@ namespace Arc_Station_Logger.ServiceUnits
         public static int Spins_W_Song;
         public static int Spins_Y_Song;
 
+        // Old variables
         public static int SpinsTotal;
         public static int SpinsWeek;
         public static int SpinsMonth;

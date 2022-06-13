@@ -56,8 +56,8 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 cmdInsertSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
                 cmdInsertSong.Parameters.AddWithValue("@Total", 1);
                 cmdInsertSong.Parameters.AddWithValue("@Year", 1);
-                cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
-                cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
+                cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now);
                 cmdInsertSong.ExecuteNonQuery();
             }
             else if (results > 0)    // Run if song is already in the datatable.

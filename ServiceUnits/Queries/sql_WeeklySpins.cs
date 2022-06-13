@@ -12,7 +12,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
     {
 
         static string TableName = "03_WeeklySpins_" + DateTime.Now.Year;
-        static string WeekColumn = $"Wk{WeekNr()}_{DateTimeExtensions.FirstDayOfWeek(DateTime.Now).ToString("MM")}";
+        static string WeekColumn = $"Wk{WeekNr()}_{DateTimeExtensions.FirstDayOfWeek(DateTime.Now).ToString("MM")}{DateTimeExtensions.FirstDayOfWeek(DateTime.Now).ToString("dd")}";
 
         public static void Run()
         {
@@ -75,15 +75,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 {
                     while (dr.Read())
                     {
-                        try
-                        {
-                            SettingsManager.Spins_W_Song = (int)dr[WeekColumn];
-                        }
-                        catch(InvalidCastException ice)
-                        {
-                            SettingsManager.Spins_W_Song = 0;
-                        }
-                        
+                        SettingsManager.Spins_W_Song = (int)dr[WeekColumn];
                     }
                 }
             }
