@@ -54,7 +54,7 @@ namespace Arc_Station_Logger.ServiceUnits
             }
             if (SettingsManager.f_PlayLog == 1)
             {
-                //PlayLog.Run();
+                
             }
             if (SettingsManager.f_ArtistCount == 1)
             {
@@ -67,6 +67,7 @@ namespace Arc_Station_Logger.ServiceUnits
 
             cnn.Open();
 
+            sql_PlaylistLog.Run();
             sql_Artists.Run();
             sql_Songs.Run();
             sql_MonthlySpins.Run();

@@ -5,19 +5,19 @@ using System.Threading;
 
 namespace ArcLogger.Scripts
 {
-    internal class PlayLog
+    internal class sql_PlaylistLog
     {
 
         private static string tableName;
 
-        public PlayLog()
+        public sql_PlaylistLog()
         {
         }
 
         public static void Run()
         {
             DateTime now = DateTime.Now;
-            tableName = "TB_PlayLog_" + now.ToString("yyyy") + "_" + now.ToString("MM");
+            tableName = "99_PlayLog_" + now.ToString("yyyy") + "_" + now.ToString("MM");
             Console.ForegroundColor = ConsoleColor.Magenta;
             SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @TableName", Database.cnn);
             sqlCommand.Parameters.AddWithValue("@TableName", tableName);

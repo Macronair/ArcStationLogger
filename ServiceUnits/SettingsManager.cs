@@ -23,11 +23,6 @@ namespace Arc_Station_Logger.ServiceUnits
         public static int f_DailySpins;
         public static int f_ArtistCount;
 
-        // Date variables
-        public static int CurrentWeek;
-        public static int CurrentMonth;
-        public static int CurrentYear;
-
         // Info about the current song
         public static bool NewSong;
         public static string CurrentArtist;

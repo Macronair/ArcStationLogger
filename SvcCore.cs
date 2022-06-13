@@ -52,7 +52,7 @@ namespace Arc_Station_Logger
                     Filter = SettingsManager.ListenFile // Which file will be monitored?
                 };
             }
-            catch (ArgumentException ex)
+            catch ()
             {
                 EventLog.WriteEntry("An error occured while loading the File Watcher object. Does the folder or file even exist?", EventLogEntryType.Error);
             }
