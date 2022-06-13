@@ -25,7 +25,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                     $"[TotalSpins] INT NULL, " +
                     $"[LastPlayed] DATETIME NOT NULL, " +
                     $"[FirstPlayed] DATETIME NOT NULL, " +
-                    $"[{CurrentYear}] INT NULL)", Database.cnn);
+                    $"[{CurrentYear}] INT NOT NULL)", Database.cnn);
                 cmdCreateTable.ExecuteNonQuery();
             }
 
@@ -37,7 +37,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
             SqlCommand cmdCheckColumn = new SqlCommand($"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{TableName}' AND column_name = '{CurrentYear}'", Database.cnn);
             if ((int)cmdCheckColumn.ExecuteScalar() == 0)
             {
-                SqlCommand cmdCreateColumn = new SqlCommand($"ALTER TABLE {TableName} ADD {CurrentYear} INT NULL");
+                SqlCommand cmdCreateColumn = new SqlCommand($"ALTER TABLE [dbo].[{TableName}] ADD {CurrentYear} INT NOT NULL DEFAULT(0)", Database.cnn);
                 cmdCreateColumn.ExecuteNonQuery();
             }
 
@@ -56,15 +56,15 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 cmdInsertSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
                 cmdInsertSong.Parameters.AddWithValue("@Total", 1);
                 cmdInsertSong.Parameters.AddWithValue("@Year", 1);
-                cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
-                cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
+                cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now);
                 cmdInsertSong.ExecuteNonQuery();
             }
             else if (results > 0)    // Run if song is already in the datatable.
             {
                 SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, {CurrentYear} = {CurrentYear} + 1, LastPlayed = @LastPlayed WHERE Artist = @Artist", Database.cnn);
                 cmdUpdateSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+                cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
                 cmdUpdateSong.ExecuteNonQuery();
             }
 
