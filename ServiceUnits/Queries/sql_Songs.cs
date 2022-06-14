@@ -84,16 +84,14 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
 
         private static void InsertRecord()
         {
-            SqlCommand cmdCheckSong = new SqlCommand($"SELECT COUNT(*) FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title;", Database.cnn);
-            cmdCheckSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-            cmdCheckSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+            SqlCommand cmdCheckSong = new SqlCommand($"SELECT COUNT(*) FROM [dbo].[{TableName}] WHERE Artist = N'{SettingsManager.CurrentArtist}' AND Title = N'{SettingsManager.CurrentTitle}';", Database.cnn);
             int results = Convert.ToInt32(cmdCheckSong.ExecuteScalar());
 
             if (results == 0)        // Run if song doesn't exists.
             {
-                SqlCommand cmdInsertSong = new SqlCommand($"INSERT INTO [dbo].[{TableName}] (Artist,Title,TotalSpins,Week,Month,Year,LastPlayed,FirstPlayed) VALUES (@Artist,@Title,@Total,@Week,@Month,@Year,@LastPlayed,@FirstPlayed)", Database.cnn);
-                cmdInsertSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdInsertSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                SqlCommand cmdInsertSong = new SqlCommand($"INSERT INTO [dbo].[{TableName}] (Artist,Title,TotalSpins,Week,Month,Year,LastPlayed,FirstPlayed) " +
+                    $"VALUES " +
+                    $"(N'{SettingsManager.CurrentArtist}',N'{SettingsManager.CurrentTitle}',@Total,@Week,@Month,@Year,@LastPlayed,@FirstPlayed)", Database.cnn);
                 cmdInsertSong.Parameters.AddWithValue("@Total", 1);
                 cmdInsertSong.Parameters.AddWithValue("@Week", 1);
                 cmdInsertSong.Parameters.AddWithValue("@Month", 1);
@@ -105,9 +103,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
             }
             else if (results > 0)    // Run if song is already in the datatable.
             {
-                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, Week = Week + 1, Month = Month + 1, Year = Year + 1, LastPlayed = @LastPlayed WHERE Artist = @Artist AND Title = @Title", Database.cnn);
-                cmdUpdateSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, Week = Week + 1, Month = Month + 1, Year = Year + 1, LastPlayed = @LastPlayed WHERE Artist = N'{SettingsManager.CurrentArtist}' AND Title = N'{SettingsManager.CurrentTitle}'", Database.cnn);
                 cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
                 cmdUpdateSong.ExecuteNonQuery();
                 SettingsManager.NewSong = false;
@@ -115,10 +111,8 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
 
             // Return the values how many times the song has played.
 
-            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT TotalSpins FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title", Database.cnn))
+            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT TotalSpins FROM [dbo].[{TableName}] WHERE Artist = N'{SettingsManager.CurrentArtist}' AND Title = N'{SettingsManager.CurrentTitle}'", Database.cnn))
             {
-                cmdReadSpins.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdReadSpins.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
                 using (SqlDataReader dr = cmdReadSpins.ExecuteReader())
                 {
                     while (dr.Read())

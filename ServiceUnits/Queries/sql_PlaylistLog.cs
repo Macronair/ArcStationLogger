@@ -38,10 +38,8 @@ namespace ArcLogger.Scripts
             {
                 num = 0;
             }
-            SqlCommand sqlCommand1 = new SqlCommand("INSERT INTO [dbo].[" + tableName + "] (PlayedOn,Artist,Title) VALUES (@PlayedOn,@Artist,@Title)", Database.cnn);
+            SqlCommand sqlCommand1 = new SqlCommand($"INSERT INTO [dbo].[" + tableName + $"] (PlayedOn,Artist,Title) VALUES (@PlayedOn,N'{SettingsManager.CurrentArtist}',N'{SettingsManager.CurrentTitle}')", Database.cnn);
             //sqlCommand1.Parameters.AddWithValue("@Id", num);
-            sqlCommand1.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-            sqlCommand1.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
             sqlCommand1.Parameters.AddWithValue("@PlayedOn", DateTime.Now);
             sqlCommand1.ExecuteNonQuery();
         }

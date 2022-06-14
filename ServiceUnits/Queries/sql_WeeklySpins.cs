@@ -45,32 +45,26 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
 
         private static void InsertRecord()
         {
-            SqlCommand cmdCheckSong = new SqlCommand($"SELECT COUNT(*) FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title;", Database.cnn);
-            cmdCheckSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-            cmdCheckSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+            SqlCommand cmdCheckSong = new SqlCommand($"SELECT COUNT(*) FROM [dbo].[{TableName}] WHERE Artist = N'{SettingsManager.CurrentArtist}' AND Title = N'{SettingsManager.CurrentTitle}'", Database.cnn);
             int results = Convert.ToInt32(cmdCheckSong.ExecuteScalar());
 
             if (results == 0)        // Run if song doesn't exists.
             {
-                SqlCommand cmdInsertSong = new SqlCommand($"INSERT INTO [dbo].[{TableName}] (Artist,Title,{WeekColumn}) VALUES (@Artist,@Title,@Week)", Database.cnn);
-                cmdInsertSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdInsertSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                SqlCommand cmdInsertSong = new SqlCommand($"INSERT INTO [dbo].[{TableName}] (Artist,Title,{WeekColumn}) " +
+                    $"VALUES " +
+                    $"(N'{SettingsManager.CurrentArtist}',N'{SettingsManager.CurrentTitle}',@Week)", Database.cnn);
                 cmdInsertSong.Parameters.AddWithValue("@Week", 1);
                 cmdInsertSong.ExecuteNonQuery();
             }
             else if (results > 0)    // Run if song is already in the datatable.
             {
-                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET {WeekColumn} = {WeekColumn} + 1 WHERE Artist = @Artist AND Title = @Title", Database.cnn);
-                cmdUpdateSong.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdUpdateSong.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
+                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET {WeekColumn} = {WeekColumn} + 1 WHERE Artist = N'{SettingsManager.CurrentArtist}' AND Title = N'{SettingsManager.CurrentTitle}'", Database.cnn);
                 cmdUpdateSong.ExecuteNonQuery();
             }
 
             // Return the values how many times the song has played.
-            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT {WeekColumn} FROM [dbo].[{TableName}] WHERE Artist = @Artist AND Title = @Title", Database.cnn))
+            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT {WeekColumn} FROM [dbo].[{TableName}] WHERE Artist = N'{SettingsManager.CurrentArtist}' AND Title = N'{SettingsManager.CurrentTitle}'", Database.cnn))
             {
-                cmdReadSpins.Parameters.AddWithValue("@Artist", SettingsManager.CurrentArtist);
-                cmdReadSpins.Parameters.AddWithValue("@Title", SettingsManager.CurrentTitle);
                 using (SqlDataReader dr = cmdReadSpins.ExecuteReader())
                 {
                     while (dr.Read())
