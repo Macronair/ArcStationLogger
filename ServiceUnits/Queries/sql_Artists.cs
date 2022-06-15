@@ -46,40 +46,50 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
 
         private static void InsertRecord()
         {
-            SqlCommand cmdCheckSong = new SqlCommand($"SELECT COUNT(*) FROM [dbo].[{TableName}] WHERE Artist = N'{SettingsManager.CurrentArtist}';", Database.cnn);
-            int results = Convert.ToInt32(cmdCheckSong.ExecuteScalar());
+            var fullartist = SettingsManager.CurrentArtist;
+            var artists = new List<string>();
+            artists.AddRange(fullartist.Split(new string[] { ", " }, StringSplitOptions.None));
+            artists.ForEach(x => x = x.Trim().TrimStart().TrimEnd());
 
-            if (results == 0)        // Run if song doesn't exists.
+            foreach (string artist in artists)
             {
-                SqlCommand cmdInsertSong = new SqlCommand($"INSERT INTO [dbo].[{TableName}] (Artist,TotalSpins,LastPlayed,FirstPlayed,{CurrentYear}) " +
-                    $"VALUES " +
-                    $"(N'{SettingsManager.CurrentArtist}'," +
-                    $"@Total,@LastPlayed,@FirstPlayed,@Year)", Database.cnn);
-                cmdInsertSong.Parameters.AddWithValue("@Total", 1);
-                cmdInsertSong.Parameters.AddWithValue("@Year", 1);
-                cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
-                cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now);
-                cmdInsertSong.ExecuteNonQuery();
-            }
-            else if (results > 0)    // Run if song is already in the datatable.
-            {
-                SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, {CurrentYear} = {CurrentYear} + 1, LastPlayed = @LastPlayed WHERE Artist = N'{SettingsManager.CurrentArtist}'", Database.cnn);
-                cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
-                cmdUpdateSong.ExecuteNonQuery();
-            }
+                artist.Trim();
+                SqlCommand cmdCheckSong = new SqlCommand($"SELECT COUNT(*) FROM [dbo].[{TableName}] WHERE Artist = N'{artist}';", Database.cnn);
+                int results = Convert.ToInt32(cmdCheckSong.ExecuteScalar());
 
-            // Return the values how many times the song has played.
-            using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT TotalSpins,{CurrentYear} FROM [dbo].[{TableName}] WHERE Artist = N'{SettingsManager.CurrentArtist}'", Database.cnn))
-            {
-                using(SqlDataReader dr = cmdReadSpins.ExecuteReader())
+                if (results == 0)        // Run if song doesn't exists.
                 {
-                    while(dr.Read())
+                    SqlCommand cmdInsertSong = new SqlCommand($"INSERT INTO [dbo].[{TableName}] (Artist,TotalSpins,LastPlayed,FirstPlayed,{CurrentYear}) " +
+                        $"VALUES " +
+                        $"(N'{artist}'," +
+                        $"@Total,@LastPlayed,@FirstPlayed,@Year)", Database.cnn);
+                    cmdInsertSong.Parameters.AddWithValue("@Total", 1);
+                    cmdInsertSong.Parameters.AddWithValue("@Year", 1);
+                    cmdInsertSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
+                    cmdInsertSong.Parameters.AddWithValue("@FirstPlayed", DateTime.Now);
+                    cmdInsertSong.ExecuteNonQuery();
+                }
+                else if (results > 0)    // Run if song is already in the datatable.
+                {
+                    SqlCommand cmdUpdateSong = new SqlCommand($"UPDATE [dbo].[{TableName}] SET TotalSpins = TotalSpins + 1, {CurrentYear} = {CurrentYear} + 1, LastPlayed = @LastPlayed WHERE Artist = N'{artist}'", Database.cnn);
+                    cmdUpdateSong.Parameters.AddWithValue("@LastPlayed", DateTime.Now);
+                    cmdUpdateSong.ExecuteNonQuery();
+                }
+
+                // Return the values how many times the song has played.
+                using (SqlCommand cmdReadSpins = new SqlCommand($"SELECT TotalSpins,{CurrentYear} FROM [dbo].[{TableName}] WHERE Artist = N'{artist}'", Database.cnn))
+                {
+                    using (SqlDataReader dr = cmdReadSpins.ExecuteReader())
                     {
-                        SettingsManager.Spins_T_Artist = (int) dr["TotalSpins"];
-                        SettingsManager.Spins_Y_Artist = (int) dr[CurrentYear];
+                        while (dr.Read())
+                        {
+                            SettingsManager.Spins_T_Artist = (int)dr["TotalSpins"];
+                            SettingsManager.Spins_Y_Artist = (int)dr[CurrentYear];
+                        }
                     }
                 }
             }
+            
         }
     }
 }

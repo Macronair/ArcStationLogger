@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arc Station Logger", "Arc Station Logger.csproj", "{AA781A9D-0847-43BA-B994-9D00712B7901}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtistSeparateTest", "ArtistSeparateTest\ArtistSeparateTest.csproj", "{48CF62FE-3180-4278-94B8-6E12A63E259B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AA781A9D-0847-43BA-B994-9D00712B7901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA781A9D-0847-43BA-B994-9D00712B7901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA781A9D-0847-43BA-B994-9D00712B7901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48CF62FE-3180-4278-94B8-6E12A63E259B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48CF62FE-3180-4278-94B8-6E12A63E259B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48CF62FE-3180-4278-94B8-6E12A63E259B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48CF62FE-3180-4278-94B8-6E12A63E259B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
