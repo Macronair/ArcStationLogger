@@ -99,6 +99,11 @@ namespace Arc_Station_Logger
                 }
                 else
                 {
+                    string[] charsToRemove = new string[] { "'" };
+                    foreach (var c in charsToRemove)
+                    {
+                        line = line.Replace(c, string.Empty);
+                    }
                     string[] songinfo = line.Split(new string[] { " - " }, StringSplitOptions.None);
 
                     SettingsManager.CurrentArtist = songinfo[0];

@@ -48,7 +48,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
         {
             var fullartist = SettingsManager.CurrentArtist;
             var artists = new List<string>();
-            artists.AddRange(fullartist.Split(new string[] { ", " }, StringSplitOptions.None));
+            artists.AddRange(fullartist.Split(new string[] { ", ", ",", "; ", ";", " .feat " }, StringSplitOptions.None));
             artists.ForEach(x => x = x.Trim().TrimStart().TrimEnd());
 
             foreach (string artist in artists)
