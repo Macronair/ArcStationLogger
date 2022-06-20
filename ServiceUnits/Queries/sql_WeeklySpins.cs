@@ -23,8 +23,7 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
                 SqlCommand cmdCreateTable = new SqlCommand($"CREATE TABLE [dbo].[{TableName}] (" +
                     $"[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, " +
                     $"[Artist] NVARCHAR(MAX) NOT NULL, " +
-                    $"[Title] NVARCHAR(MAX) NOT NULL, " +
-                    $"[{WeekColumn}] INT NOT NULL)", Database.cnn);
+                    $"[Title] NVARCHAR(MAX) NOT NULL)", Database.cnn);
                 cmdCreateTable.ExecuteNonQuery();
             }
 
@@ -33,13 +32,13 @@ namespace Arc_Station_Logger.ServiceUnits.Queries
 
         private static void CheckColumn()
         {
+            WeekColumn = $"Wk{WeekNr()}_{DateTimeExtensions.FirstDayOfWeek(DateTime.Now).ToString("MM")}{DateTimeExtensions.FirstDayOfWeek(DateTime.Now).ToString("dd")}";
             SqlCommand cmdCheckColumn = new SqlCommand($"SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{TableName}' AND column_name = '{WeekColumn}'", Database.cnn);
             if((int)cmdCheckColumn.ExecuteScalar() == 0)
             {
                 SqlCommand cmdCreateColumn = new SqlCommand($"ALTER TABLE [dbo].[{TableName}] ADD {WeekColumn} INT NOT NULL DEFAULT(0)", Database.cnn);
                 cmdCreateColumn.ExecuteNonQuery();
             }
-
             InsertRecord();
         }
 
